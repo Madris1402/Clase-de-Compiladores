@@ -1,2 +1,2 @@
-# Clase-de-Compiladores
-Tareas y Proyecto de Compiladores 2024-II
+# Compiladores 2024-II
+Tareas y Proyecto de Compiladores
