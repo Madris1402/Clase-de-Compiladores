@@ -87,8 +87,9 @@ public class Automata2 {
     private int estado_B() {
         char c=siguienteCaracter();
         switch(c){
-            case '0': return estado_B();
-            case '1': return estado_B();
+            case '0': return estado_D();
+            case '1': return estado_D();
+            case ' ': return aceptado;
             default: return error;
         }
     }
@@ -96,13 +97,22 @@ public class Automata2 {
     private int estado_C() {
         char c=siguienteCaracter();
         switch(c){
-            case '0': return estado_D();
+            case '0': return estado_E();
             case '1': return estado_C();
             default: return error;
         }
     }
 
     private int estado_D() {
+        char c=siguienteCaracter();
+        switch(c){
+            case '0': return estado_D();
+            case '1': return estado_D();
+            default: return error;
+        }
+    }
+
+    private int estado_E() {
         char c=siguienteCaracter();
         switch(c){
             case '0': return estado_D();
