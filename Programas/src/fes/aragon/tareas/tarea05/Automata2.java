@@ -55,10 +55,16 @@ public class Automata2 {
             int valor = app.estado_A();
             if (valor == app.aceptado) {
                 System.out.println(palabra + ": Cadena Valida");
+                app.reinicioIndice();
             } else {
                 System.out.println(palabra + ": Cadena Invalida");
+                app.reinicioIndice();
             }
         }
+    }
+
+    private void reinicioIndice() {
+        indice = 0;
     }
     private char siguienteCaracter() {
         char caracter=' ';

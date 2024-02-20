@@ -24,7 +24,7 @@ public class Automata1 {
             String archivo = scanner.nextLine();
 
             ArrayList<String> palabras = new ArrayList<>();
-            File f = new File(System.getProperty("user.dir") + File.separator + "files" + File.separator + archivo);
+            File f = new File(System.getProperty("user.dir") + File.separator + "files" + File.separator +  archivo);
             if (f.exists()) {
                 System.out.println("Archivo encontrado");
                 System.out.println("Contenido: ");
@@ -55,19 +55,25 @@ public class Automata1 {
                 int valor = app.estado_A();
                 if (valor == app.aceptado) {
                     System.out.println(palabra + ": Cadena Valida");
+                    app.reinicioIndice();
                 } else {
                     System.out.println(palabra + ": Cadena Invalida");
+                    app.reinicioIndice();
                 }
             }
         }
-            private char siguienteCaracter() {
-                char caracter = ' ';
-                if (indice < cadena.length()) {
-                    caracter = cadena.charAt(indice);
-                    indice++;
-                }
-                return caracter;
+
+    private void reinicioIndice() {
+        indice = 0;
+    }
+        private char siguienteCaracter() {
+            char caracter = ' ';
+            if (indice < cadena.length()) {
+                caracter = cadena.charAt(indice);
+                indice++;
             }
+            return caracter;
+        }
 
         private int estado_A() {
             char c=siguienteCaracter();
@@ -101,8 +107,7 @@ public class Automata1 {
             switch(c){
                 case '0': return estado_D();
                 case '1': return estado_D();
-                case ' ': return estado_D();
-                default: return estado_D();
+                default: return error;
             }
         }
 
