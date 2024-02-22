@@ -1,10 +1,10 @@
-package fes.aragon.profe;
+package fes.aragon.profe.cadenasTexto;
 
 public class Inicio {
 
     public static void main(String[] args) {
-        Matriz app = new Matriz();
-        app.setToken("mike");
+        Lexico app = new Lexico();
+        app.setToken("Mike");
         try {
             int verifica = app.inicio();
             if (verifica == 1) {
