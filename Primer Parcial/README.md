@@ -1,6 +1,6 @@
 # Compiladores 2024-II
 
-<!-- Programas a Entregar:
+Programas a Entregar:
 
 (Todos con Lector de Archivos [fuente.txt])
 
@@ -17,4 +17,4 @@ Basados en Matriz
 
 Escoger Libremente
 6. Autómata de Lenguaje  (AFD Grande)
-7. Archivo de Configuración -->
+7. Archivo de Configuración
