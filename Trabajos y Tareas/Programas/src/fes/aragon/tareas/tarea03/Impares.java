@@ -1,46 +1,12 @@
 package fes.aragon.tareas.tarea03;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Scanner;
+import fes.aragon.tareas.tarea01.Gestor;
 
 
 public class Impares {
     public static void main(String[] args) {
 
-        // Leer Archivos
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Buscar Nombre del Archivo: ");
-        String archivo = scanner.nextLine();
-
-        ArrayList<String> palabras = new ArrayList<>();
-        File f = new File(System.getProperty("user.dir") + File.separator + "files" + File.separator + archivo);
-        if (f.exists()) {
-            System.out.println("Archivo encontrado");
-            System.out.println("Contenido: ");
-
-            try {
-                BufferedReader obj = new BufferedReader(new FileReader(f));
-                String palabra;
-                while ((palabra = obj.readLine()) != null){
-                    if (!palabra.trim().isEmpty()) {
-                        palabras.add(palabra);
-                    }
-                }
-                System.out.println(palabras);
-            }
-            catch(FileNotFoundException e){
-                e.printStackTrace();
-            }
-            catch (IOException e1){
-                e1.printStackTrace();
-            }
-        }
-        else{
-            System.out.println("No se encontro el archivo");
-        }
-
-        for (String palabra : palabras) {
+        for (String palabra : Gestor.leer("Impares.fes")) {
             int indice = 0;
             int estadoActual = 0;
             int columna = 1;
