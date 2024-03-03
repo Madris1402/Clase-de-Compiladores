@@ -1,12 +1,12 @@
 # Compiladores 2024-II
 
-<!-- Programas a Entregar:
+Programas a Entregar:
 
 (Todos con Lector de Archivos [fuente.txt])
 
 Basados en IF
 1. Par de Unos o Impares de Ceros Unidos
-2. Autóata Finito no Determinista a Autómata Finito Determinista (0 | 1) * 110* Documentar el diagrama y el proceso.
+2. Autómata Finito no Determinista a Autómata Finito Determinista (0 | 1) * 110* Documentar el diagrama y el proceso.
 
 Basados en Métodos (Funciones)
 3. El Autómata 2 se convierte a Métodos.
@@ -17,4 +17,4 @@ Basados en Matriz
 
 Escoger Libremente
 6. Autómata de Lenguaje  (AFD Grande)
-7. Archivo de Configuración -->
+7. Archivo de Configuración
