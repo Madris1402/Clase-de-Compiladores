@@ -46,8 +46,10 @@ public class Gestor {
         try {
             BufferedReader obj = new BufferedReader(new FileReader(f));
             String palabra;
-            while ((palabra = obj.readLine()) != null) {
-                palabras.add(palabra.trim()); // Elimina espacios al principio y final
+            while ((palabra = obj.readLine()) != null){
+                if (!palabra.trim().isEmpty()) {
+                    palabras.add(palabra);
+                }
             }
             obj.close(); // Cierra el archivo al terminar la lectura
         } catch (IOException e) {
