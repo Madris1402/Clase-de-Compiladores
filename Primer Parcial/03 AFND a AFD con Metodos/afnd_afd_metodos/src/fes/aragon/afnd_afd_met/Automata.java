@@ -1,6 +1,8 @@
 package fes.aragon.afnd_afd_met;
 
 
+import fes.aragon.herramientas.Gestor;
+
 import  java.lang.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -17,34 +19,7 @@ public class Automata{
     public static void main(String[] args) {
         Automata app=new Automata();
 
-        ArrayList<String> palabras = new ArrayList<>();
-        File f = new File(System.getProperty("user.dir") + File.separator + "fuente.txt");
-        if (f.exists()) {
-            System.out.println("Archivo encontrado");
-            System.out.println("Contenido: ");
-
-            try {
-                BufferedReader obj = new BufferedReader(new FileReader(f));
-                String palabra;
-                while ((palabra = obj.readLine()) != null){
-                    if (!palabra.trim().isEmpty()) {
-                        palabras.add(palabra);
-                    }
-                }
-                System.out.println(palabras);
-            }
-            catch(FileNotFoundException e){
-                e.printStackTrace();
-            }
-            catch (IOException e1){
-                e1.printStackTrace();
-            }
-        }
-        else{
-            System.out.println("No se encontro el archivo");
-        }
-
-        for (String palabra : palabras) {
+        for (String palabra : Gestor.leer("fuente.txt")) {
             app.cadena = palabra;
             int valor = app.estado_A();
             if (valor == app.aceptado) {
