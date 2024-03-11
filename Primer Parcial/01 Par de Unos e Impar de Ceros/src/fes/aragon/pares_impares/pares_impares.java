@@ -4,9 +4,9 @@ import fes.aragon.herramientas.Gestor;
 
 public class pares_impares {
 
-    public static void main(String[] args) {
+    private static String  archivo = "fuente.txt";
 
-        String archivo = "Ejemplos.fes";
+    public static void main(String[] args) {
 
         for (String palabra : Gestor.leer(archivo)) {
             int indice = 0;
