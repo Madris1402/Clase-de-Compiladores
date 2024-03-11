@@ -9,17 +9,16 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Automata{
-
+    private static String archivo = "fuente.txt";
     private int indice=0;
     private String cadena="";
     private final int error=-1;
     private final int aceptado=1;
 
-
     public static void main(String[] args) {
         Automata app=new Automata();
 
-        for (String palabra : Gestor.leer("fuente.txt")) {
+        for (String palabra : Gestor.leer(archivo)) {
             app.cadena = palabra;
             int valor = app.estado_A();
             if (valor == app.aceptado) {

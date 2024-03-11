@@ -34,7 +34,7 @@ public class Gestor {
 
     public static ArrayList<String> leer(String buscar) {
 
-        File f = new File(System.getProperty("user.dir") + File.separator + "files" + File.separator + buscar);
+        File f = new File(System.getProperty("user.dir") + File.separator + buscar);
 
         if (f.exists()) {
             System.out.println("Archivo encontrado");
