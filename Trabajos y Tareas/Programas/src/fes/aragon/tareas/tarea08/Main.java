@@ -2,6 +2,7 @@ package fes.aragon.tareas.tarea08;
 import fes.aragon.tareas.tarea08.Lexico;
 
 import java.io.*;
+import fes.aragon.tareas.tarea01.Gestor;
 public class Main {
     private Lexico lexico;
     private Tokens token;
@@ -23,7 +24,6 @@ public class Main {
     private void S() throws IOException{
         System.out.println("S");
         E();
-        token = lexico.yylex();
         if (token != Tokens.PUNTOYCOMA){
             System.out.println("Error, se esperaba ;");
         }
@@ -37,12 +37,15 @@ public class Main {
     }
 
     private void Ep() throws IOException {
+        System.out.println("Ep");
         if (token == Tokens.OR){
             token = lexico.yylex();
             T();
             Ep();
-        }else{
-            System.out.println("Error, se espera or");
+        }else if (token != Tokens.AND) {
+            System.out.println("Error, caracter no valido");
+        } else{
+            return;
         }
     }
 
@@ -53,11 +56,14 @@ public class Main {
     }
 
     private void Tp() throws IOException {
+        System.out.println("Tp");
         if(token == Tokens.AND){
             F();
             Tp();
+        } else if (token != Tokens.OR) {
+            System.out.println("Error, caracter no valido");
         } else {
-            System.out.println("Error, se espera and");
+            return;
         }
     }
 
