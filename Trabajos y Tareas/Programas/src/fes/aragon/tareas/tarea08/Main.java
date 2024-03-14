@@ -67,8 +67,18 @@ public class Main {
         if (token == Tokens.NOT){
             token = lexico.yylex();
             F();
-        } else{
+        } else if (token == Tokens.TRUE || token == Tokens.FALSE){
+            token = lexico.yylex();
             return;
+        } else if (token == Tokens.ABREPARENTESIS) {
+            token = lexico.yylex();
+            E();
+            if (token == Tokens.CIERREPARENTESIS){
+                token = lexico.yylex();
+                return;
+            }
+        } else {
+            System.out.println("Error, caracter no esperado");
         }
     }
 
