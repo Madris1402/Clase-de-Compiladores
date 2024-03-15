@@ -31,7 +31,10 @@ public class Lexico {
 		if (indice < token.length()) {
 			caracter = token.charAt(indice);
 			if (caracter == ' ' && indice < token.length()) {
-				espacio = true;
+				int columna = indice + 1;
+				reinicio();
+				throw new Exception(
+						token + ": Cadena Invalida ---> Espacio entre palabras encontrado en la columna: " + columna);
 			}
 			indice++;
 		}
@@ -44,9 +47,8 @@ public class Lexico {
 		do {
 			boolean caracterEncontrado = false;
 			boolean caracterUsuarioEncontrado = false;
-			espacio = false;
 			c = siguienteCaracter();
-			if(!espacio) {
+
 				if (Herramienta.numero(c) || Herramienta.letra(c)) { //Anliza los caracteres que sean letras o digitos, para diferenciar entre los declarados por el usuario y los L y D
 					for (int j = 0; j < lenguaje.length; j++) {			
 						if (c == lenguaje[j]) { //Si son del Lenguaje del usuario, registra la columna donde lo encontro
@@ -92,8 +94,6 @@ public class Lexico {
 				} else {
 					throw new Exception(token + ": Caracter invalido ---> " + c + " encontrado en la columna: " + (indice));
 				}
-			}
-
 
 		} while (!Herramienta.finCadena(c) || espacio);
 		return estado;
