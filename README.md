@@ -1,2 +1,2 @@
 # Compiladores 2024-II
-Tareas y Proyecto de Compiladores
+Tareas, Entregas y Proyecto de Compiladores
