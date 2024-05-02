@@ -4,6 +4,7 @@
  */
 package fes.aragon.profe.hash.compilador;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class Principal {
     }
 
     public String getRuta() throws URISyntaxException {
-        ruta = this.getClass().getResource("/fes/aragon/compilador/fuente.txt").toURI().getPath();
+        ruta = System.getProperty("user.dir") + File.separator + "files" + File.separator + "fuente.txt";
         return ruta;
     }
 

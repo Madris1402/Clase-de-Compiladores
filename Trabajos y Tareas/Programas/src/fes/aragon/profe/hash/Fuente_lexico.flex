@@ -28,9 +28,8 @@ import java.io.Reader;
  return new Symbol(sym.EOF,new String("Fin del archivo"));
 //return null;
 %eofval}
-LETRA= [a-zA-Z]
+LETRA=[a-zA-Z]
 DIGITO=[0-9]
-LETRA= [a-zA-Z]
 ID={LETRA}({LETRA}|{DIGITO})*
 INT={DIGITO}+
 %%
@@ -47,8 +46,8 @@ INT={DIGITO}+
 "<=" {System.out.println("mayorigual"); return new Symbol(sym.MENORIGUAL); }
 ":=" {System.out.println("asigna"); return new Symbol(sym.ASIG); }
 "PRINT" { return new Symbol(sym.PRINT); }
-{ID}* {
-		Simbolo s;
+{ID} {
+		Datos s;
 		if((s = tabla.buscar(yytext())) == null){
 			s = tabla.insertar(yytext());
 		}
@@ -57,7 +56,7 @@ INT={DIGITO}+
 }
 {INT}+ {
 		System.out.println("Entero");
-		return new Symbol(sym.NUMERO, new Integer(yytext())); }
+		return new Symbol(sym.NUMERO, Integer.valueOf(yytext()));}
 [\t\r\f]  {}
 [\n] {}
 " " {System.out.println("Simbolo ."+yytext());}

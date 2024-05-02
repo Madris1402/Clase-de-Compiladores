@@ -23,7 +23,7 @@ public class TablaSimbolos {
     public Datos insertar(String nombre) {
         //Simbolo s = new Simbolo(nombre, new Integer(0));
         Datos ss=new Datos();
-        ss.setLexema(sym.ID);
+        ss.setLexema(String.valueOf(sym.ID));
         ss.setNombreVariable(nombre);
         ss.setValor("0");
         t.put(nombre, ss);

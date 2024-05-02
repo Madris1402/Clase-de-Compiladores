@@ -11,7 +11,7 @@ package fes.aragon.profe.hash.compilador;
  */
 public class Datos {
     private String lexema;
-    private int nombreVariable;
+    private String nombreVariable;
     private String valor;
     private boolean whl=false;
     private int whlt=0;
@@ -20,7 +20,7 @@ public class Datos {
     }
     
 
-    public Datos(String lexema, int nombreVariable, String valor) {
+    public Datos(String lexema, String nombreVariable, String valor) {
         this.lexema = lexema;
         this.nombreVariable = nombreVariable;
         this.valor = valor;
@@ -34,11 +34,11 @@ public class Datos {
         this.lexema = lexema;
     }
 
-    public int getNombreVariable() {
+    public String getNombreVariable() {
         return nombreVariable;
     }
 
-    public void setNombreVariable(int nombreVariable) {
+    public void setNombreVariable(String nombreVariable) {
         this.nombreVariable = nombreVariable;
     }
 

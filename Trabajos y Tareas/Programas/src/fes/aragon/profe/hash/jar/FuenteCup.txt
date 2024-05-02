@@ -42,7 +42,7 @@ precedence left MENOR,MENORIGUAL,MAYOR,MAYORIGUAL;
 
 expr_lista ::= expr_lista expr_parte
 		|expr_lista asig PUNTOYCOMA
-		
+		|asig PUNTOYCOMA
 		|expr_parte
 		|error {:;:}		
 		;
@@ -51,6 +51,7 @@ expr_parte ::=expr:e
 	PUNTOYCOMA;
 asig ::= ID:s ASIG expr:e  {:RESULT=e;
 						 s.setValor(e);
+						 System.out.println("Se logro");
 						 :}
 		|ID:s ASIG asig:e {:RESULT=e;
 						 s.setValor(e);

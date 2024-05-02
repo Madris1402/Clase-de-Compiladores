@@ -72,7 +72,7 @@ public class Main {
 
         if (token == Tokens.NOT){
             token = lexico.yylex();
-            F();
+            E();
         } else if (token == Tokens.TRUE || token == Tokens.FALSE){
             token = lexico.yylex();
             return;
