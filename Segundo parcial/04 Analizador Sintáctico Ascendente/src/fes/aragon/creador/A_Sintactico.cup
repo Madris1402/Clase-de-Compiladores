@@ -1,0 +1,98 @@
+package fes.aragon.compilador;
+import java_cup.runtime.Symbol;
+import java.util.LinkedList;
+import java.util.ArrayList;
+
+
+parser code
+{:
+    public String resultado="";
+    public static LinkedList<TError> TablaES = new LinkedList<TError>();
+    public ArrayList<String> datos=new ArrayList<>();
+
+    public void imprimir(String e){
+        System.out.println("Valor= "+e);
+    }
+
+    public void syntax_error(Symbol s)
+    {        
+        String lexema = s.value.toString();
+        int fila = s.right;
+        int columna = s.left;
+        
+        System.out.println("!Error Sintactico Recuperado!");
+        System.out.println("\t\tLexema: "+lexema);
+        System.out.println("\t\tFila: "+fila);
+        System.out.println("\t\tColumna: "+columna);
+
+        TError datos = new TError(lexema,fila,columna,"Error Sintactico","Caracter no esperado");
+        TablaES.add(datos);
+       
+    }
+
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
+    {        
+        String lexema = s.value.toString();
+        int fila = s.right;
+        int columna = s.left;
+        
+        System.out.println("!Error Sintactico");
+        System.out.println("\t\tLexema: "+lexema);
+        System.out.println("\t\tFila: "+fila);
+        System.out.println("\t\tColumna: "+columna);
+
+         TError datos = new TError(lexema,fila,columna,"Error Sintactico","Caracter no esperado");
+        TablaES.add(datos);
+     
+    }
+:}
+
+action code
+{:
+        public void imprimirInterno(String e){
+            System.out.println("Valor_i= "+e);
+        }
+
+:}
+
+terminal not,and,or,par_a,par_c,punto_coma, tr, fl;
+non terminal INICIO;
+non terminal String E;
+non terminal String letra;
+
+precedence left or, and, not;
+
+INICIO::= INICIO E:a punto_coma   {:
+                resultado=a;
+                imprimir(a);
+                imprimirInterno(a);
+                datos.add(a);
+            :}
+            |E:a punto_coma   {:
+                resultado=a;
+                imprimir(a);
+                imprimirInterno(a);
+                datos.add(a);
+             :}
+;
+
+
+
+E::= not E:a {: boolean val1= Boolean.parseBoolean(a);
+                    boolean r = !val1;
+                    RESULT = String.valueOf(r); :}
+
+    |E:a and E:b {: boolean val1= Boolean.parseBoolean(a);
+                    boolean val2= Boolean.parseBoolean(b);
+                    boolean r = val1 && val2;
+                    RESULT = String.valueOf(r); :}
+
+    |E:a or E:b {:  boolean val1= Boolean.parseBoolean(a);
+                    boolean val2= Boolean.parseBoolean(b);
+                    boolean r = val1 || val2;
+                    RESULT = String.valueOf(r); :}
+
+    |par_a E:a par_c{: RESULT = a; :}
+    |tr
+    |fl
+    ;
