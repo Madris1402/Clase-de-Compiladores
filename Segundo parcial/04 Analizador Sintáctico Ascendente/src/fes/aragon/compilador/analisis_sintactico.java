@@ -298,7 +298,10 @@ class CUP$analisis_sintactico$actions {
           case 7: // E ::= tr 
             {
               String RESULT =null;
-
+		int aleft = ((java_cup.runtime.Symbol)CUP$analisis_sintactico$stack.peek()).left;
+		int aright = ((java_cup.runtime.Symbol)CUP$analisis_sintactico$stack.peek()).right;
+		Object a = (Object)((java_cup.runtime.Symbol) CUP$analisis_sintactico$stack.peek()).value;
+		 RESULT = (String) a; 
               CUP$analisis_sintactico$result = parser.getSymbolFactory().newSymbol("E",1, ((java_cup.runtime.Symbol)CUP$analisis_sintactico$stack.peek()), ((java_cup.runtime.Symbol)CUP$analisis_sintactico$stack.peek()), RESULT);
             }
           return CUP$analisis_sintactico$result;
@@ -307,7 +310,10 @@ class CUP$analisis_sintactico$actions {
           case 8: // E ::= fl 
             {
               String RESULT =null;
-
+		int aleft = ((java_cup.runtime.Symbol)CUP$analisis_sintactico$stack.peek()).left;
+		int aright = ((java_cup.runtime.Symbol)CUP$analisis_sintactico$stack.peek()).right;
+		Object a = (Object)((java_cup.runtime.Symbol) CUP$analisis_sintactico$stack.peek()).value;
+		 RESULT = (String) a; 
               CUP$analisis_sintactico$result = parser.getSymbolFactory().newSymbol("E",1, ((java_cup.runtime.Symbol)CUP$analisis_sintactico$stack.peek()), ((java_cup.runtime.Symbol)CUP$analisis_sintactico$stack.peek()), RESULT);
             }
           return CUP$analisis_sintactico$result;

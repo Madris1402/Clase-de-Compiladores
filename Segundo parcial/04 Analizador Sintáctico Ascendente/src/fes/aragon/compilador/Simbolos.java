@@ -8,6 +8,7 @@ package fes.aragon.compilador;
 /** CUP generated class containing symbol constants. */
 public class Simbolos {
   /* terminals */
+  public static final int bool = 10;
   public static final int not = 2;
   public static final int par_c = 6;
   public static final int or = 4;
@@ -28,7 +29,8 @@ public class Simbolos {
   "par_c",
   "punto_coma",
   "tr",
-  "fl"
+  "fl",
+  "bool"
   };
 }
 

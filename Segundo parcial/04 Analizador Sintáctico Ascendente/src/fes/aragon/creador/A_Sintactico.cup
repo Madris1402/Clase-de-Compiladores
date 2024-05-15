@@ -57,6 +57,7 @@ action code
 
 terminal not,and,or,par_a,par_c,punto_coma, tr, fl;
 non terminal INICIO;
+terminal String bool;
 non terminal String E;
 non terminal String letra;
 
@@ -93,6 +94,5 @@ E::= not E:a {: boolean val1= Boolean.parseBoolean(a);
                     RESULT = String.valueOf(r); :}
 
     |par_a E:a par_c{: RESULT = a; :}
-    |tr
-    |fl
-    ;
+    |tr:a {: RESULT = (String) a; :}
+    |fl:a {: RESULT = (String) a; :};
