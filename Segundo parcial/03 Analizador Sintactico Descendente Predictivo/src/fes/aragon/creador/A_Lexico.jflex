@@ -32,9 +32,9 @@ espacio=[ ,\t,\r,\f]+
 
 {espacio} {/*Ignore*/}
 
-<YYINITIAL> "+"         { System.out.println("Reconocio "+yytext()+" Mas"); return Plus; }
-<YYINITIAL> "*"         { System.out.println("Reconocio "+yytext()+" Por"); return Multiply; }
-<YYINITIAL> ";"         { System.out.println("Reconocio "+yytext()+" PuntoyComa"); return Semi; }
+<YYINITIAL> "+"         { System.out.println("Reconocio "+yytext()+" Mas"); return Mas; }
+<YYINITIAL> "*"         { System.out.println("Reconocio "+yytext()+" Por"); return Por; }
+<YYINITIAL> ";"         { System.out.println("Reconocio "+yytext()+" PuntoyComa"); return Punto_coma; }
 <YYINITIAL> "("         { System.out.println("Reconocio "+yytext()+" parA"); return ParA; }
 <YYINITIAL> ")"         { System.out.println("Reconocio "+yytext()+" parC"); return ParC; }
 

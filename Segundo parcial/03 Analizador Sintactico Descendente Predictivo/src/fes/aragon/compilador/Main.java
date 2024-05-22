@@ -1,7 +1,5 @@
 package fes.aragon.compilador;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -12,8 +10,10 @@ public class Main {
     public Main(){
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args){
+
         try {
+
             Main app = new Main();
             app.run();
         } catch (Exception exception){
@@ -22,8 +22,8 @@ public class Main {
     }
 
     private void run() throws URISyntaxException, IOException {
-        ASPD_Analyzer myAnalyzer = new ASPD_Analyzer();
+        Analizador_Sintactico_DP myAnalyzer = new Analizador_Sintactico_DP();
         
-        myAnalyzer.StartAnalysis();
+        myAnalyzer.Inicio();
     }
 }

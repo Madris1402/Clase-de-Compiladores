@@ -1,9 +1,9 @@
 package fes.aragon.compilador;
 
 public enum Tokens {
-    Plus,
-    Multiply,
-    Semi,
+    Mas,
+    Por,
+    Punto_coma,
     ParA,
     ParC,
     ID,
