@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.Stack;
 
 import fes.aragon.exception.wordException;
+import fes.aragon.herramientas.refactorizer;
 
 
 public class Inicio {
@@ -11,19 +12,34 @@ public class Inicio {
 	private Tokens token;
 	Stack<String> errores = new Stack<String>();
 	Stack<String> simbolos = new Stack<String>();
+	private static boolean acceptada = true;
+	
 
 	public static void main(String[] args) throws wordException {
 		Inicio app = new Inicio();
-		
+		refactorizer refact = new refactorizer();
+		try {
+			refact.refactorizer();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		try {
 			Reader rd = new BufferedReader(new FileReader(
-					System.getProperty("user.dir") + File.separator + "fuente.txt"));
+					System.getProperty("user.dir") + File.separator + "fuente.ref"));
 			app.lexico = new Lexico(rd);
 			app.token = app.lexico.yylex();
 			while(!(app.token == null)) {
 				app.S();
-				System.out.println("Palabra acceptada\n");
+				if(acceptada) {
+					System.out.println("Palabra acceptada\n");
+				}else {
+					System.out.println("Palabra no acceptada\n");
+					acceptada = true;
+				}
+				
+				
 				app.token = app.lexico.yylex();
 			}
 		} catch (FileNotFoundException e) {
@@ -72,7 +88,15 @@ public class Inicio {
 
 	private void T() throws IOException {
 		simbolos.push("T");
-		F();
+		try {
+			F();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (wordException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Tp();
 	}
 
@@ -80,7 +104,15 @@ public class Inicio {
 		simbolos.push("Tp");
 		if (token == Tokens.AND) {
 			token = lexico.yylex();
-			F();
+			try {
+				F();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (wordException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			Tp();
 		} else if (token != Tokens.OR) {
 			errores.push("Error, se esperaba AND");
@@ -90,7 +122,7 @@ public class Inicio {
 		}
 	}
 
-	private void F() throws IOException {
+	private void F() throws IOException, wordException {
 		simbolos.push("F");
 		if (token == Tokens.NOT) {
 			token = lexico.yylex();
@@ -109,6 +141,11 @@ public class Inicio {
 			}
 		} else {
 			errores.push("Error, caracter no esperado");
+			while(!errores.isEmpty()) {
+				System.out.println(errores.pop());
+			}
+			acceptada = false;
+			throw new wordException("Palabra no acceptada");
 		}
 	}
 
