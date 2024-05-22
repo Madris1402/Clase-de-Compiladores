@@ -5,7 +5,11 @@
  */
 package fes.aragon.compilador;
 
+import fes.aragon.herramientas.refactorizer;
+
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.URISyntaxException;
 
 /**
@@ -20,11 +24,14 @@ public class Inicio {
     }
 
     public String getRuta() throws URISyntaxException {
-        ruta = this.getClass().getResource("/fes/aragon/compilador/fuente.txt").toURI().getPath();
+        ruta = System.getProperty("user.dir") + File.separator + "src" + File.separator + "fes" + File.separator + "aragon" + File.separator + "compilador" + File.separator +  "fuente.ref";
         return ruta;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        refactorizer refac = new refactorizer();
+        refac.refactorizer();
+
         try {
             Inicio app = new Inicio();
             //app.crear();
@@ -34,12 +41,6 @@ public class Inicio {
         }
 
     }
-
-    /*private void crear() throws Exception {
-        String archivoJFlex = "FuenteJFlex.txt";
-        String archivoCUP = "FuenteCup.txt";
-        Crear crear = new Crear(archivoJFlex, archivoCUP);
-    }*/
     private void correr() {
         try {
             analisis_sintactico inicio;
