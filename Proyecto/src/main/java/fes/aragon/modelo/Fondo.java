@@ -276,7 +276,7 @@ public class Fondo extends ComponentesJuego {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Interprete");
         alert.setHeaderText("Limirte alcanzado");
-        alert.setContentText("La nave no puede moverse mas");
+        alert.setContentText("No puedes moverte mas");
         alert.show();
     }
     private void ejecutar() throws IOException, ClassNotFoundException {
