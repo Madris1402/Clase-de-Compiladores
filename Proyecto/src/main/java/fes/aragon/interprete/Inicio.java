@@ -12,6 +12,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public class Inicio extends Application {
     private GraphicsContext graficos;
     private Group root;
@@ -62,7 +64,13 @@ public class Inicio extends Application {
             @Override
             public void handle(long tiempoActual) {
                 double t = (tiempoActual - tiempoInicio) / 1000000000.0;
-                calculosLogica();
+                try {
+                    calculosLogica();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
                 pintar();
 
 
@@ -75,7 +83,7 @@ public class Inicio extends Application {
         this.fondo.pintar(graficos);
     }
 
-    private void calculosLogica() {
+    private void calculosLogica() throws IOException, ClassNotFoundException {
         this.fondo.logicaCalculos();
 
     }
@@ -85,7 +93,13 @@ public class Inicio extends Application {
             @Override
             public void handle(KeyEvent arg0) {
                 // TODO Auto-generated method stub
-                fondo.teclado(arg0, true);
+                try {
+                    fondo.teclado(arg0, true);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 

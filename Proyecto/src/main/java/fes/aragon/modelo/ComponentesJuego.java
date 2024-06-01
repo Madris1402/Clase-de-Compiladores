@@ -3,7 +3,11 @@ package fes.aragon.modelo;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 
+import java.io.IOException;
+
 public abstract class ComponentesJuego {
+	protected int mx = 455;
+	protected int my = 455;
 	protected int x;
 	protected int y;
 	protected String imagen;
@@ -60,7 +64,7 @@ public abstract class ComponentesJuego {
 
 
 	public abstract void pintar(GraphicsContext graficos);
-	public abstract void teclado(KeyEvent evento,boolean presiona);
+	public abstract void teclado(KeyEvent evento,boolean presiona) throws IOException, ClassNotFoundException;
 	public abstract void raton(KeyEvent evento);
-	public abstract void logicaCalculos();
+	public abstract void logicaCalculos() throws IOException, ClassNotFoundException;
 }
