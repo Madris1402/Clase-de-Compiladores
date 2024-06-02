@@ -63,6 +63,9 @@ public abstract class ComponentesJuego {
 	}
 
 
+	@SuppressWarnings("deprecation")
+	public abstract void stop() throws Exception;
+
 	public abstract void pintar(GraphicsContext graficos);
 	public abstract void teclado(KeyEvent evento,boolean presiona) throws IOException, ClassNotFoundException;
 	public abstract void raton(KeyEvent evento);

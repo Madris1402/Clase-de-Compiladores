@@ -1,21 +1,19 @@
 package fes.aragon.modelo;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.net.URISyntaxException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
+import java.util.Random;
 
+import fes.aragon.extras.MusicaCiclica;
+import fes.aragon.extras.Sonidos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import static java.lang.Integer.parseInt;
 
 public class Fondo extends ComponentesJuego {
@@ -25,14 +23,21 @@ public class Fondo extends ComponentesJuego {
     private int mx = 205;
     private int mxx = 0;
     private int myy = 0;
+    private int py = 305;
+    private int px = 205;
+    private int pxx = 0;
+    private int pyy = 0;
     private Image arribaImg;
     private Image abajoImg;
     private Image derechaImg;
     private Image izquierdaImg;
     private Image imagen;
     private Image imagen2;
+    private Image imagen3;
     private Image manzana;
     private Image manzana2;
+    private Image ave;
+    private Image ave2;
     private Stage ventana;
     private ArrayList<String> comandos = new ArrayList<>();
     private ArrayList<String> tempcom = new ArrayList<>();
@@ -48,11 +53,17 @@ public class Fondo extends ComponentesJuego {
     private boolean derecha = false;
     private boolean izquierda = false;
 
+    private Thread hiloFondo;
     ///
     private Integer variableX;
     private String operadorLogico;
     private Integer limiteVariableX;
 
+    @SuppressWarnings("deprecation")
+    @Override
+    public void stop() throws Exception {
+        hiloFondo.stop();
+    }
     public Fondo(int x, int y, String imagen, int velocidad, Stage ventana) {
         super(x, y, imagen, velocidad);
         try{
@@ -63,15 +74,40 @@ public class Fondo extends ComponentesJuego {
             this.abajoImg = new Image(new File(this.getClass().getResource("/fes/aragon/imagenes/abajo.png").getFile()).toURI().toString());
             this.manzana = new Image(new File(this.getClass().getResource("/fes/aragon/imagenes/manzana.png").getFile()).toURI().toString());
             this.manzana2 = new Image(new File(this.getClass().getResource("/fes/aragon/imagenes/manzana2.png").getFile()).toURI().toString());
+            this.ave = new Image(new File(this.getClass().getResource("/fes/aragon/imagenes/ave.png").getFile()).toURI().toString());
+            this.ave2 = new Image(new File(this.getClass().getResource("/fes/aragon/imagenes/ave2.png").getFile()).toURI().toString());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
+        this.randpos();
         this.imagen = derechaImg;
         this.imagen2 = this.manzana;
+        this.imagen3 = this.ave;
         this.ventana = ventana;
     }
+    public int randpos(){
 
+        Random random = new Random();
+
+        this.px = 55 + 50 * (random.nextInt(8) + 2);
+        this.py = 55 + 50 * (random.nextInt(8) + 2);
+        System.out.println("ubicacion del ave: x = " + (((px - 55) / 50) + 1)  + " y = " + (((py - 55) / 50) + 1));
+
+        this.mx = 55 + 50 * (random.nextInt(8) + 2);
+
+        this.my = 55 + 50 * (random.nextInt(8) + 2);
+        System.out.println("ubicacion de la manzana: x = " + (((mx - 55) / 50) + 1)  + " y = " + (((my - 55) / 50) + 1));
+
+        while ((my == py) && (mx == px))  {
+            this.py = 55 + 50 * (random.nextInt(6) + 2);
+            System.out.println("ERROR 'ubicaciones iguales': nueva ubicacion del ave: x = " + (((px - 55) / 50) + 1)  + " y = " + (((py - 55) / 50) + 1));;
+
+            this.mx = 55 + 50 * (random.nextInt(8) + 2);
+            System.out.println("ERROR 'ubicaciones iguales': nueva ubicacion de la manzana: x = " + (((mx - 55) / 50) + 1)  + " y = " + (((my - 55) / 50) + 1));
+        }
+        return 0;
+    }
     @Override
     public void pintar(GraphicsContext graficos) {
         // TODO Auto-generated method stub
@@ -87,6 +123,7 @@ public class Fondo extends ComponentesJuego {
             yy += 50;
         }
         graficos.drawImage(imagen2, mx, my, ancho, alto);
+        graficos.drawImage(imagen3, px, py, ancho, alto);
         graficos.drawImage(imagen, x, y, ancho, alto);
         if (!comandos.isEmpty()) {
             if (indice < comandos.size()) {
@@ -95,7 +132,7 @@ public class Fondo extends ComponentesJuego {
             }
         }
 
-//        graficos.drawImage(imagen, (x+(ancho+10)*2), y,ancho,alto);
+//        graficos.drawImage(imagen3, (px+(ancho+10)*2), y,ancho,alto);
 //
 //        graficos.drawImage(imagen, x, (y+(alto+10)*2),ancho,alto);
 //
@@ -133,6 +170,30 @@ public class Fondo extends ComponentesJuego {
 
     }
 
+    private void avecapt(){ // Ave captura gusano
+        if (x == px && y == py){
+            this.comandos.clear();
+            System.out.println("te capturo el ave");
+            this.comandos = (ArrayList<String>) this.tempcom.clone();
+            this.imagen = null;
+            graficos.clearRect(0, 0, 600, 600);
+            this.imagen3 = this.ave2;
+            this.iniciar = false;
+            this.indice = 1;
+
+
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Interprete");
+            alert.setHeaderText("Has Perdido");
+            alert.setContentText("Te capturo el Ave");
+            alert.show();
+            Sonidos perder = new Sonidos("perder");
+            hiloFondo = new Thread(perder);
+            hiloFondo.start();
+        }
+    }
+
     @Override
     public void logicaCalculos() throws IOException, ClassNotFoundException {
         if (iniciar) {
@@ -148,6 +209,9 @@ public class Fondo extends ComponentesJuego {
                     break;
 
                 case "coloca":
+
+                    this.avecapt();
+
                     if (x < xx) {
                         x += velocidad;
                         this.imagen = this.derechaImg;
@@ -182,6 +246,26 @@ public class Fondo extends ComponentesJuego {
                         this.imagen2 = this.manzana;
                         this.ejecutar();
 
+                    }
+                    break;
+
+                case "ave":
+
+                    if (px < pxx) {
+                        px += velocidad;
+                        this.imagen3 = null;
+                        graficos.clearRect(0, 0, 600, 600);
+                    } else {
+                        if (py < pyy) {
+                            py += velocidad;
+                            graficos.clearRect(0, 0, 600, 600);
+
+                        }
+                    }
+                    if ((px >= mxx) && (py >= pyy)) {
+                        indice++;
+                        this.imagen3 = this.ave;
+                        this.ejecutar();
                     }
                     break;
 
@@ -228,6 +312,7 @@ public class Fondo extends ComponentesJuego {
                         break;
                     }
 
+                    this.avecapt();
 
                     // acciones
 
@@ -273,6 +358,12 @@ public class Fondo extends ComponentesJuego {
     }
 
     private void Limerror(){
+
+
+        graficos.clearRect(0, 0, 600, 600);
+        Sonidos limite = new Sonidos("mensaje");
+        hiloFondo = new Thread(limite);
+        hiloFondo.start();
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Interprete");
         alert.setHeaderText("Limirte alcanzado");
@@ -280,6 +371,9 @@ public class Fondo extends ComponentesJuego {
         alert.show();
     }
     private void ejecutar() throws IOException, ClassNotFoundException {
+
+        this.avecapt();
+
         if (x == mx && y == my){
             System.out.println("encontraste la manzana");
             this.imagen = null;
@@ -294,7 +388,11 @@ public class Fondo extends ComponentesJuego {
             alert.setHeaderText("Se alcanzo el ultimo comando");
             alert.setContentText("Has encontrado la Manzana");
             alert.show();
+            Sonidos ganar = new Sonidos("ganar");
+            hiloFondo = new Thread(ganar);
+            hiloFondo.start();
         }
+
         if (indice < comandos.size()) {
             String string = comandos.get(indice);
             String[] datos = string.split(" ");
@@ -346,7 +444,6 @@ public class Fondo extends ComponentesJuego {
                         int indiceRepetir = indiceInicial;
                         while (!Objects.equals(comandos.get(indiceRepetir), "fin")){
                             comandos.add(indiceFin + 1, comandos.get(indiceRepetir));
-//                            System.out.println((indiceRepetir) + " " + comandos.get(indiceRepetir));
                             indiceRepetir++;
                             indiceFin++;
                         }
@@ -376,6 +473,16 @@ public class Fondo extends ComponentesJuego {
                     this.comando = "manzana";
                     break;
 
+                case "ave":
+                    px = 55;
+                    py = 55;
+                    pxx = parseInt(datos[1]);
+                    pyy = parseInt(datos[2]);
+                    pxx = (px + (ancho + 10) * (pxx - 1));
+                    pyy = (py + (alto + 10) * (pyy - 1));
+                    this.comando = "ave";
+                    break;
+
                 case "mover":
                     moverCuadros = parseInt(datos[1]);
                     if (arriba) {
@@ -398,18 +505,23 @@ public class Fondo extends ComponentesJuego {
             }
 
         } else {
+
+            this.avecapt();
+
             System.out.println("termino comandos");
             graficos.clearRect(0,0,600,600);
-            this.comandos.clear();
-            this.comandos = (ArrayList<String>) this.tempcom.clone();
             this.iniciar = false;
             this.indice = 1;
-
+            this.comandos.clear();
+            this.comandos = (ArrayList<String>) this.tempcom.clone();
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Interprete");
             alert.setHeaderText("Se alcanzo el ultimo comando");
             alert.setContentText("No has encontrado la Manzana");
             alert.show();
+            Sonidos mensaje = new Sonidos("mensaje");
+            hiloFondo = new Thread(mensaje);
+            hiloFondo.start();
         }
 
     }
@@ -425,6 +537,7 @@ public class Fondo extends ComponentesJuego {
             BufferedReader buff = new BufferedReader(fr);
             String cad;
             this.tempcom.clear();
+            tempcom.add("derecha");
             this.iniciar();
             while ((cad = buff.readLine()) != null) {
                 tempcom.add(cad);
@@ -442,11 +555,10 @@ public class Fondo extends ComponentesJuego {
         y = 55;
         xx = 0;
         yy = 0;
-        mx = 205;
-        my = 305;
         indice = 0;
         this.imagen = this.derechaImg;
         this.imagen2 = this.manzana;
+        this.imagen3 = this.ave;
         moverCuadros = 0;
         comando = "";
         arriba = false;
@@ -454,4 +566,6 @@ public class Fondo extends ComponentesJuego {
         derecha = false;
         izquierda = false;
     }
+
 }
+
