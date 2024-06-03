@@ -95,9 +95,9 @@ public class Fondo extends ComponentesJuego {
         System.out.println("ubicacion del ave: x = " + (((px - 55) / 50) + 1)  + " y = " + (((py - 55) / 50) + 1));
 
         this.mx = 55 + 50 * (random.nextInt(8) + 2);
-
         this.my = 55 + 50 * (random.nextInt(8) + 2);
         System.out.println("ubicacion de la manzana: x = " + (((mx - 55) / 50) + 1)  + " y = " + (((my - 55) / 50) + 1));
+
 
         while ((my == py) && (mx == px))  {
             this.py = 55 + 50 * (random.nextInt(6) + 2);
@@ -160,6 +160,11 @@ public class Fondo extends ComponentesJuego {
                     iniciar();
                     this.ejecutar();
                     this.iniciar = true;
+                    break;
+
+                case "C":
+                    randpos();
+                    graficos.clearRect(0, 0, 600, 600);
                     break;
             }
         }
