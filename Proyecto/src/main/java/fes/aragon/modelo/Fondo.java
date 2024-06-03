@@ -198,75 +198,11 @@ public class Fondo extends ComponentesJuego {
     public void logicaCalculos() throws IOException, ClassNotFoundException {
         if (iniciar) {
             switch (this.comando) {
-                case "arriba":
-                case "abajo":
-                case "izquierda":
-                case "derecha":
-                case "repetir":
+
+                case "arriba", "abajo", "izquierda", "derecha", "repetir", "coloca", "manzana", "ave":
                     indice++;
                     graficos.clearRect(0, 0, 600, 600);
                     this.ejecutar();
-                    break;
-
-                case "coloca":
-
-                    this.avecapt();
-
-                    if (x < xx) {
-                        x += velocidad;
-                        this.imagen = this.derechaImg;
-                        graficos.clearRect(0, 0, 600, 600);
-                    } else {
-                        if (y < yy) {
-                            this.imagen = this.abajoImg;
-                            y += velocidad;
-                            graficos.clearRect(0, 0, 600, 600);
-                        }
-                    }
-                    if ((x >= xx) && (y >= yy)) {
-                        indice++;
-                        this.ejecutar();
-                    }
-                    break;
-
-                case "manzana":
-
-                    if (mx < mxx) {
-                        mx += velocidad;
-                        this.imagen2 = null;
-                        graficos.clearRect(0, 0, 600, 600);
-                    } else {
-                        if (my < myy) {
-                            my += velocidad;
-                            graficos.clearRect(0, 0, 600, 600);
-                        }
-                    }
-                    if ((mx >= mxx) && (my >= myy)) {
-                        indice++;
-                        this.imagen2 = this.manzana;
-                        this.ejecutar();
-
-                    }
-                    break;
-
-                case "ave":
-
-                    if (px < pxx) {
-                        px += velocidad;
-                        this.imagen3 = null;
-                        graficos.clearRect(0, 0, 600, 600);
-                    } else {
-                        if (py < pyy) {
-                            py += velocidad;
-                            graficos.clearRect(0, 0, 600, 600);
-
-                        }
-                    }
-                    if ((px >= mxx) && (py >= pyy)) {
-                        indice++;
-                        this.imagen3 = this.ave;
-                        this.ejecutar();
-                    }
                     break;
 
                 case "mover":
@@ -454,32 +390,29 @@ public class Fondo extends ComponentesJuego {
                     break;
 
                 case "coloca":
-                    x = 55;
-                    y = 55;
                     xx = parseInt(datos[1]);
                     yy = parseInt(datos[2]);
-                    xx = (x + (ancho + 10) * (xx - 1));
-                    yy = (y + (alto + 10) * (yy - 1));
+                    this.x = 55 + (50 * (xx - 1));
+                    this.y = 55 + (50 * (yy - 1));
+                    System.out.println("se coloco gusano en: x = " + (((px - 55) / 50) + 1)  + " y = " + (((py - 55) / 50) + 1));
                     this.comando = "coloca";
                     break;
 
                 case "manzana":
-                    mx = 55;
-                    my = 55;
                     mxx = parseInt(datos[1]);
                     myy = parseInt(datos[2]);
-                    mxx = (mx + (ancho + 10) * (mxx - 1));
-                    myy = (my + (alto + 10) * (myy - 1));
+                    this.mx = 55 + (50 * (mxx - 1));
+                    this.my = 55 + (50 * (myy - 1));
+                    System.out.println("se coloco manzana en: x = " + (((px - 55) / 50) + 1)  + " y = " + (((py - 55) / 50) + 1));
                     this.comando = "manzana";
                     break;
 
                 case "ave":
-                    px = 55;
-                    py = 55;
                     pxx = parseInt(datos[1]);
                     pyy = parseInt(datos[2]);
-                    pxx = (px + (ancho + 10) * (pxx - 1));
-                    pyy = (py + (alto + 10) * (pyy - 1));
+                    this.px = 55 + (50 * (pxx - 1));
+                    this.py = 55 + (50 * (pyy - 1));
+                    System.out.println("se coloco ave en: x = " + (((px - 55) / 50) + 1)  + " y = " + (((py - 55) / 50) + 1));
                     this.comando = "ave";
                     break;
 
