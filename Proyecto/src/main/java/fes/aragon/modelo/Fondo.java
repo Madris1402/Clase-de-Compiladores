@@ -474,7 +474,7 @@ public class Fondo extends ComponentesJuego {
         alert.setContentText("<COMANDOS>\n\ncoloca x y: sirve para colocar al gusando en cualquier parte del mapa" +
                 "\n\nave x y: sirve para colocar al ave en cualquier parte del mapa\n\nmanzana x y: sirve para colocar la manzana en cualquier parte del mapa" +
                 "\n\narriba, abajo, izquierda, derecha: se coloca antes de mover e indica la direccion a la que se va a mover" +
-                "\n\nmover n: indica la cantidad de casillas que el gusano se movera\n\nrepetir: se coloca antes de la lista de comandos que se desea repetir, siempre debe terminar con una linea que diga fin " +
+                "\n\nmover n: indica la cantidad de casillas que el gusano se movera\n\nrepetir n: se coloca antes de la lista de comandos que se desea repetir y se especifica las veces a repetir, siempre debe terminar con una linea que diga fin" +
                 "\n\n<TECLAS>\n\nA: Abrir un archivo\n\nR: Ejecutar las instrucciones del archivo\n\nC: Crear un nuevo nivel\n\nM: pausar o reanudar la musica " +
                 "\n\nY: Abrir este cuadro de dialogo\n\n" );
         alert.show();
