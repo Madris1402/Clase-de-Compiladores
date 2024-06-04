@@ -182,7 +182,7 @@ public class Fondo extends ComponentesJuego {
         if (iniciar) {
             switch (this.comando) {
 
-                case "arriba", "abajo", "izquierda", "derecha", "repetir", "coloca", "manzana", "ave":
+                case "arriba", "abajo", "izquierda", "derecha", "repetir", "coloca", "manzana", "ave", "fin":
                     indice++;
                     graficos.clearRect(0, 0, 600, 600);
                     this.ejecutar();
@@ -352,12 +352,12 @@ public class Fondo extends ComponentesJuego {
                             indiceRepetir++;
                             indiceFin++;
                             contador ++;
-                            if (contador == 200) {
+                            if (contador == 20000) {
                                 this.comandos.clear();
                                 break;
                             }
                         }
-                        if (contador == 200){
+                        if (contador == 20000){
                             this.comandos = (ArrayList<String>) this.tempcom.clone();
                             graficos.clearRect(0, 0, 600, 600);
                             Sonidos notcomando = new Sonidos("mensaje");
@@ -471,7 +471,7 @@ public class Fondo extends ComponentesJuego {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Interprete");
         alert.setHeaderText("Instrucciones");
-        alert.setContentText("<COMANDOS>\n\ncoloca x y: sirve para colocar al gusando en cualquier parte del mapa" +
+        alert.setContentText("<COMANDOS>\n\ncoloca x y: sirve para colocar al gusano en cualquier parte del mapa" +
                 "\n\nave x y: sirve para colocar al ave en cualquier parte del mapa\n\nmanzana x y: sirve para colocar la manzana en cualquier parte del mapa" +
                 "\n\narriba, abajo, izquierda, derecha: se coloca antes de mover e indica la direccion a la que se va a mover" +
                 "\n\nmover n: indica la cantidad de casillas que el gusano se movera\n\nrepetir n: se coloca antes de la lista de comandos que se desea repetir y se especifica las veces a repetir, siempre debe terminar con una linea que diga fin" +
@@ -481,19 +481,23 @@ public class Fondo extends ComponentesJuego {
     }
 
     private boolean notcom(){
-        this.comandos.clear();
-        this.comandos = (ArrayList<String>) this.tempcom.clone();
-        graficos.clearRect(0, 0, 600, 600);
-        Sonidos notcomando = new Sonidos("mensaje");
-        hiloSonidos = new Thread(notcomando);
-        hiloSonidos.start();
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Interprete");
-        alert.setHeaderText("Comando no reconocido");
-        alert.setContentText('"' + comandos.get(indice) + '"' + " en la linea: " + (indice));
-        alert.show();
-        System.out.println("comando no reconocido: " + '"' + comandos.get(indice) + '"' + " en la linea: " + (indice));
-        return com = false;
+
+        if (Objects.equals(comandos.get(indice), "fin")){
+            return com = true;
+        }
+            this.comandos.clear();
+            this.comandos = (ArrayList<String>) this.tempcom.clone();
+            graficos.clearRect(0, 0, 600, 600);
+            Sonidos notcomando = new Sonidos("mensaje");
+            hiloSonidos = new Thread(notcomando);
+            hiloSonidos.start();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Interprete");
+            alert.setHeaderText("Comando no reconocido");
+            alert.setContentText('"' + comandos.get(indice) + '"' + " en la linea: " + (indice));
+            alert.show();
+            System.out.println("comando no reconocido: " + '"' + comandos.get(indice) + '"' + " en la linea: " + (indice));
+            return com = false;
     }
 
     public int randpos(){
