@@ -68,6 +68,5 @@ public abstract class ComponentesJuego {
 
 	public abstract void pintar(GraphicsContext graficos);
 	public abstract void teclado(KeyEvent evento,boolean presiona) throws IOException, ClassNotFoundException;
-	public abstract void raton(KeyEvent evento);
 	public abstract void logicaCalculos() throws IOException, ClassNotFoundException;
 }

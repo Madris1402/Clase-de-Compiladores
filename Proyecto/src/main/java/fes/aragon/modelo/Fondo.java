@@ -14,6 +14,9 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import javax.sound.sampled.UnsupportedAudioFileException;
+
 import static java.lang.Integer.parseInt;
 
 public class Fondo extends ComponentesJuego {
@@ -27,6 +30,7 @@ public class Fondo extends ComponentesJuego {
     private int px = 205;
     private int pxx = 0;
     private int pyy = 0;
+    boolean com = true;
     private Image arribaImg;
     private Image abajoImg;
     private Image derechaImg;
@@ -53,7 +57,9 @@ public class Fondo extends ComponentesJuego {
     private boolean derecha = false;
     private boolean izquierda = false;
 
-    private Thread hiloFondo;
+    private boolean mute = false;
+    private Thread hiloSonidos;
+    private MusicaCiclica entrada = new MusicaCiclica("musica");
     ///
     private Integer variableX;
     private String operadorLogico;
@@ -62,9 +68,9 @@ public class Fondo extends ComponentesJuego {
     @SuppressWarnings("deprecation")
     @Override
     public void stop() throws Exception {
-        hiloFondo.stop();
+        hiloSonidos.stop();
     }
-    public Fondo(int x, int y, String imagen, int velocidad, Stage ventana) {
+    public Fondo(int x, int y, String imagen, int velocidad, Stage ventana) throws UnsupportedAudioFileException, IOException {
         super(x, y, imagen, velocidad);
         try{
             System.out.println(this.getClass().getResource(imagen).getFile());
@@ -85,28 +91,7 @@ public class Fondo extends ComponentesJuego {
         this.imagen2 = this.manzana;
         this.imagen3 = this.ave;
         this.ventana = ventana;
-    }
-    public int randpos(){
-
-        Random random = new Random();
-
-        this.px = 55 + 50 * (random.nextInt(8) + 2);
-        this.py = 55 + 50 * (random.nextInt(8) + 2);
-        System.out.println("ubicacion del ave: x = " + (((px - 55) / 50) + 1)  + " y = " + (((py - 55) / 50) + 1));
-
-        this.mx = 55 + 50 * (random.nextInt(8) + 2);
-        this.my = 55 + 50 * (random.nextInt(8) + 2);
-        System.out.println("ubicacion de la manzana: x = " + (((mx - 55) / 50) + 1)  + " y = " + (((my - 55) / 50) + 1));
-
-
-        while ((my == py) && (mx == px))  {
-            this.py = 55 + 50 * (random.nextInt(6) + 2);
-            System.out.println("ERROR 'ubicaciones iguales': nueva ubicacion del ave: x = " + (((px - 55) / 50) + 1)  + " y = " + (((py - 55) / 50) + 1));;
-
-            this.mx = 55 + 50 * (random.nextInt(8) + 2);
-            System.out.println("ERROR 'ubicaciones iguales': nueva ubicacion de la manzana: x = " + (((mx - 55) / 50) + 1)  + " y = " + (((my - 55) / 50) + 1));
-        }
-        return 0;
+        entrada.reproducir();
     }
     @Override
     public void pintar(GraphicsContext graficos) {
@@ -125,18 +110,15 @@ public class Fondo extends ComponentesJuego {
         graficos.drawImage(imagen2, mx, my, ancho, alto);
         graficos.drawImage(imagen3, px, py, ancho, alto);
         graficos.drawImage(imagen, x, y, ancho, alto);
+        graficos.fillText("Proyecto Final: Madrigal Urencio Ricardo - Mariaca Vazquez Enrique", 120, 20);
+        graficos.fillText("Presiona Y para leer las instrucciones", 200, 40);
+        graficos.clearRect(0, 0, 55, 40);
         if (!comandos.isEmpty()) {
             if (indice < comandos.size()) {
                 graficos.fillText(comandos.get(indice), 55, 40);
                 graficos.clearRect(0, 0, 55, 40);
             }
         }
-
-//        graficos.drawImage(imagen3, (px+(ancho+10)*2), y,ancho,alto);
-//
-//        graficos.drawImage(imagen, x, (y+(alto+10)*2),ancho,alto);
-//
-//        graficos.drawImage(imagen, (x+(ancho+10)*2), (y+(alto+10)*2),ancho,alto);
     }
 
     @Override
@@ -163,39 +145,35 @@ public class Fondo extends ComponentesJuego {
                     break;
 
                 case "C":
+
+                    x = 55;
+                    y = 55;
                     randpos();
+                    this.imagen = derechaImg;
+                    this.imagen2 = manzana;
+                    this.imagen3 = ave;
                     graficos.clearRect(0, 0, 600, 600);
                     break;
+
+                case "M":
+
+                    if(!mute) {
+                        System.out.println("Sin sonido");
+                        mute = true;
+                        entrada.detener();
+
+                    }else if(mute) {
+                        System.out.println("Con sonido");
+                        mute = false;
+                        entrada.continuar();
+                    }
+
+                    break;
+
+                case "Y":
+                    about();
+                    break;
             }
-        }
-    }
-
-    @Override
-    public void raton(KeyEvent evento) {
-
-    }
-
-    private void avecapt(){ // Ave captura gusano
-        if (x == px && y == py){
-            this.comandos.clear();
-            System.out.println("te capturo el ave");
-            this.comandos = (ArrayList<String>) this.tempcom.clone();
-            this.imagen = null;
-            graficos.clearRect(0, 0, 600, 600);
-            this.imagen3 = this.ave2;
-            this.iniciar = false;
-            this.indice = 1;
-
-
-
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Interprete");
-            alert.setHeaderText("Has Perdido");
-            alert.setContentText("Te capturo el Ave");
-            alert.show();
-            Sonidos perder = new Sonidos("perder");
-            hiloFondo = new Thread(perder);
-            hiloFondo.start();
         }
     }
 
@@ -298,22 +276,7 @@ public class Fondo extends ComponentesJuego {
         }
     }
 
-    private void Limerror(){
-
-
-        graficos.clearRect(0, 0, 600, 600);
-        Sonidos limite = new Sonidos("mensaje");
-        hiloFondo = new Thread(limite);
-        hiloFondo.start();
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Interprete");
-        alert.setHeaderText("Limirte alcanzado");
-        alert.setContentText("No puedes moverte mas");
-        alert.show();
-    }
     private void ejecutar() throws IOException, ClassNotFoundException {
-
-        this.avecapt();
 
         if (x == mx && y == my){
             System.out.println("encontraste la manzana");
@@ -330,8 +293,8 @@ public class Fondo extends ComponentesJuego {
             alert.setContentText("Has encontrado la Manzana");
             alert.show();
             Sonidos ganar = new Sonidos("ganar");
-            hiloFondo = new Thread(ganar);
-            hiloFondo.start();
+            hiloSonidos = new Thread(ganar);
+            hiloSonidos.start();
         }
 
         if (indice < comandos.size()) {
@@ -378,6 +341,7 @@ public class Fondo extends ComponentesJuego {
                     break;
 
                 case "repetir":
+                    int contador = 0;
                     int indiceInicial = indice + 1;
                     int indiceFin = comandos.indexOf("fin");
                     int repeticiones = parseInt(datos[1]) - 1;
@@ -387,8 +351,27 @@ public class Fondo extends ComponentesJuego {
                             comandos.add(indiceFin + 1, comandos.get(indiceRepetir));
                             indiceRepetir++;
                             indiceFin++;
+                            contador ++;
+                            if (contador == 200) {
+                                this.comandos.clear();
+                                break;
+                            }
                         }
-
+                        if (contador == 200){
+                            this.comandos = (ArrayList<String>) this.tempcom.clone();
+                            graficos.clearRect(0, 0, 600, 600);
+                            Sonidos notcomando = new Sonidos("mensaje");
+                            hiloSonidos = new Thread(notcomando);
+                            hiloSonidos.start();
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Interprete");
+                            alert.setHeaderText("ERROR");
+                            alert.setContentText("se esperaba: \"fin\"");
+                            alert.show();
+                            System.out.println("se esperaba: \"fin\"");
+                            com = false;
+                            break;
+                        }
                     }
                     System.out.println("comandos a repetir: " + repeticiones);
                     this.comando = "repetir";
@@ -439,29 +422,137 @@ public class Fondo extends ComponentesJuego {
                     break;
 
                 default:
+                    notcom();
                     break;
             }
 
         } else {
 
             this.avecapt();
-
-            System.out.println("termino comandos");
-            graficos.clearRect(0,0,600,600);
-            this.iniciar = false;
-            this.indice = 1;
-            this.comandos.clear();
-            this.comandos = (ArrayList<String>) this.tempcom.clone();
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Interprete");
-            alert.setHeaderText("Se alcanzo el ultimo comando");
-            alert.setContentText("No has encontrado la Manzana");
-            alert.show();
-            Sonidos mensaje = new Sonidos("mensaje");
-            hiloFondo = new Thread(mensaje);
-            hiloFondo.start();
+            if (com) {
+                System.out.println("termino comandos");
+                graficos.clearRect(0, 0, 600, 600);
+                this.iniciar = false;
+                this.indice = 1;
+                this.comandos.clear();
+                this.comandos = (ArrayList<String>) this.tempcom.clone();
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Interprete");
+                alert.setHeaderText("Se alcanzo el ultimo comando");
+                alert.setContentText("No has encontrado la Manzana");
+                alert.show();
+                Sonidos mensaje = new Sonidos("mensaje");
+                hiloSonidos = new Thread(mensaje);
+                hiloSonidos.start();
+            }
         }
 
+    }
+
+    private void iniciar() {
+        x = 55;
+        y = 55;
+        xx = 0;
+        yy = 0;
+        indice = 0;
+        this.imagen = this.derechaImg;
+        this.imagen2 = this.manzana;
+        this.imagen3 = this.ave;
+        moverCuadros = 0;
+        comando = "";
+        arriba = false;
+        abajo = false;
+        derecha = false;
+        izquierda = false;
+    }
+
+    public void about(){
+        graficos.clearRect(0, 0, 600, 600);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Interprete");
+        alert.setHeaderText("Instrucciones");
+        alert.setContentText("<COMANDOS>\n\ncoloca x y: sirve para colocar al gusando en cualquier parte del mapa" +
+                "\n\nave x y: sirve para colocar al ave en cualquier parte del mapa\n\nmanzana x y: sirve para colocar la manzana en cualquier parte del mapa" +
+                "\n\narriba, abajo, izquierda, derecha: se coloca antes de mover e indica la direccion a la que se va a mover" +
+                "\n\nmover n: indica la cantidad de casillas que el gusano se movera\n\nrepetir: se coloca antes de la lista de comandos que se desea repetir, siempre debe terminar con una linea que diga fin " +
+                "\n\n<TECLAS>\n\nA: Abrir un archivo\n\nR: Ejecutar las instrucciones del archivo\n\nC: Crear un nuevo nivel\n\nM: pausar o reanudar la musica " +
+                "\n\nY: Abrir este cuadro de dialogo\n\n" );
+        alert.show();
+    }
+
+    private boolean notcom(){
+        this.comandos.clear();
+        this.comandos = (ArrayList<String>) this.tempcom.clone();
+        graficos.clearRect(0, 0, 600, 600);
+        Sonidos notcomando = new Sonidos("mensaje");
+        hiloSonidos = new Thread(notcomando);
+        hiloSonidos.start();
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Interprete");
+        alert.setHeaderText("Comando no reconocido");
+        alert.setContentText('"' + comandos.get(indice) + '"' + " en la linea: " + (indice));
+        alert.show();
+        System.out.println("comando no reconocido: " + '"' + comandos.get(indice) + '"' + " en la linea: " + (indice));
+        return com = false;
+    }
+
+    public int randpos(){
+
+        Random random = new Random();
+
+        this.px = 55 + 50 * (random.nextInt(8) + 2);
+        this.py = 55 + 50 * (random.nextInt(8) + 2);
+        System.out.println("ubicacion del ave: x = " + (((px - 55) / 50) + 1)  + " y = " + (((py - 55) / 50) + 1));
+
+        this.mx = 55 + 50 * (random.nextInt(8) + 2);
+        this.my = 55 + 50 * (random.nextInt(8) + 2);
+        System.out.println("ubicacion de la manzana: x = " + (((mx - 55) / 50) + 1)  + " y = " + (((my - 55) / 50) + 1));
+
+
+        while ((my == py) && (mx == px))  {
+            this.py = 55 + 50 * (random.nextInt(6) + 2);
+            System.out.println("ERROR 'ubicaciones iguales': nueva ubicacion del ave: x = " + (((px - 55) / 50) + 1)  + " y = " + (((py - 55) / 50) + 1));;
+
+            this.mx = 55 + 50 * (random.nextInt(8) + 2);
+            System.out.println("ERROR 'ubicaciones iguales': nueva ubicacion de la manzana: x = " + (((mx - 55) / 50) + 1)  + " y = " + (((my - 55) / 50) + 1));
+        }
+        return 0;
+    }
+    private void Limerror(){
+
+        graficos.clearRect(0, 0, 600, 600);
+        Sonidos limite = new Sonidos("mensaje");
+        hiloSonidos = new Thread(limite);
+        hiloSonidos.start();
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Interprete");
+        alert.setHeaderText("Limite alcanzado");
+        alert.setContentText("No puedes moverte mas");
+        alert.show();
+    }
+
+    private void avecapt(){ // Ave captura gusano
+        if (x == px && y == py){
+            this.comandos.clear();
+            System.out.println("te capturo el ave");
+            this.comandos = (ArrayList<String>) this.tempcom.clone();
+            this.imagen = null;
+            graficos.clearRect(0, 0, 600, 600);
+            this.imagen3 = this.ave2;
+            this.iniciar = false;
+            this.indice = 1;
+
+
+            Sonidos perder = new Sonidos("perder");
+            hiloSonidos = new Thread(perder);
+            hiloSonidos.start();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Interprete");
+            alert.setHeaderText("Has Perdido");
+            alert.setContentText("Te capturo el Ave");
+            alert.show();
+
+        }
     }
 
     private void abrirArchivo() throws IOException, ClassNotFoundException {
@@ -486,23 +577,6 @@ public class Fondo extends ComponentesJuego {
             fr.close();
         }
 
-    }
-
-    private void iniciar() {
-        x = 55;
-        y = 55;
-        xx = 0;
-        yy = 0;
-        indice = 0;
-        this.imagen = this.derechaImg;
-        this.imagen2 = this.manzana;
-        this.imagen3 = this.ave;
-        moverCuadros = 0;
-        comando = "";
-        arriba = false;
-        abajo = false;
-        derecha = false;
-        izquierda = false;
     }
 
 }

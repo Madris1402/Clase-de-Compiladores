@@ -12,6 +12,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 
 public class Inicio extends Application {
@@ -24,7 +25,7 @@ public class Inicio extends Application {
     private Stage ventana;
 
     @Override
-    public void start(Stage ventana) {
+    public void start(Stage ventana) throws UnsupportedAudioFileException, IOException {
         this.ventana = ventana;
         componentesIniciar();
         pintar();
@@ -33,27 +34,19 @@ public class Inicio extends Application {
         this.ventana.setTitle("Interprete");
         this.ventana.show();
         ciclo();
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public void stop() throws Exception {
-        hiloFondo.stop();
+        fondo.about();
     }
 
     public static void main(String[] args) {
         launch(args);
     }
 
-    private void componentesIniciar() {
+    private void componentesIniciar() throws UnsupportedAudioFileException, IOException {
         root = new Group();
         escena = new Scene(root, 600, 600);
         hoja = new Canvas(600, 600);
         root.getChildren().add(hoja);
         graficos = hoja.getGraphicsContext2D();
-        MusicaCiclica entrada = new MusicaCiclica("musica_entrada");
-        hiloFondo = new Thread(entrada);
-        hiloFondo.start();
         fondo = new Fondo(55, 55, "/fes/aragon/imagenes/derecha.png", 2, ventana);
 
     }
@@ -95,9 +88,7 @@ public class Inicio extends Application {
                 // TODO Auto-generated method stub
                 try {
                     fondo.teclado(arg0, true);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                } catch (ClassNotFoundException e) {
+                } catch (IOException | ClassNotFoundException e) {
                     throw new RuntimeException(e);
                 }
             }

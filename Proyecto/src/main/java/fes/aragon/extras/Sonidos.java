@@ -45,31 +45,7 @@ public class Sonidos implements Runnable {
 			buffer = new BufferedInputStream(archivo);
 			player = new Player(buffer);
 			player.play();
-			while (true) {
-				if (player.isComplete()) {
-					archivo.close();
-					try {
-						this.archivo = new FileInputStream(
-								this.getClass().getResource("/fes/aragon/recursos/" + nombreArchivo + ".mp3").toURI().getPath());
-					} catch (URISyntaxException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					buffer = new BufferedInputStream(archivo);
 
-					player = new Player(buffer);
-					player.play();
-
-				}
-
-			}
-
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (JavaLayerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
