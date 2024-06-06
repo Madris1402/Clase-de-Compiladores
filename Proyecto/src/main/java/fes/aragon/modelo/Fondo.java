@@ -380,24 +380,68 @@ public class Fondo extends ComponentesJuego {
                 case "coloca":
                     xx = parseInt(datos[1]);
                     yy = parseInt(datos[2]);
+                    if (((xx | yy) > 10) | ((xx | yy) < 1)){
+                        com = false;
+                        xx = 1;
+                        yy = 1;
+                        this.comandos.clear();
+                        this.comandos = (ArrayList<String>) this.tempcom.clone();
+                        graficos.clearRect(0, 0, 600, 600);
+                        System.out.println("ERROR: no puedes colocar al gusano aqui");
+                        Sonidos fueralimites = new Sonidos("mensaje");
+                        hiloSonidos = new Thread(fueralimites);
+                        hiloSonidos.start();
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Interprete");
+                        alert.setHeaderText("Fuera de limites");
+                        alert.setContentText("No puedes colocar al gusano aqui");
+                        alert.show();
+                    }
                     this.x = 55 + (50 * (xx - 1));
                     this.y = 55 + (50 * (yy - 1));
-                    System.out.println("se coloco gusano en: x = " + (((px - 55) / 50) + 1)  + " y = " + (((py - 55) / 50) + 1));
+                    System.out.println("se coloco gusano en: x = " + (((x - 55) / 50) + 1)  + " y = " + (((y - 55) / 50) + 1));
                     this.comando = "coloca";
                     break;
 
                 case "manzana":
+                    int tempmx;
+                    int tempmy;
+                    tempmx = mx;
+                    tempmy = my;
                     mxx = parseInt(datos[1]);
                     myy = parseInt(datos[2]);
+                    if (((mxx | myy) > 10) | ((mxx | myy) < 1)){
+                        com = false;
+                        mx = tempmx;
+                        my = tempmy;
+                        this.comandos.clear();
+                        this.comandos = (ArrayList<String>) this.tempcom.clone();
+                        graficos.clearRect(0, 0, 600, 600);
+                        System.out.println("ERROR: no puedes colocar la manzana aqui");
+                        System.out.println("se coloco manzana en: x = " + (((mx - 55) / 50) + 1)  + " y = " + (((my - 55) / 50) + 1));
+                        Sonidos limite = new Sonidos("mensaje");
+                        hiloSonidos = new Thread(limite);
+                        hiloSonidos.start();
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Interprete");
+                        alert.setHeaderText("Fuera de limites");
+                        alert.setContentText("No puedes colocar la manzana aqui");
+                        alert.show();
+                        break;
+                    }
                     this.mx = 55 + (50 * (mxx - 1));
                     this.my = 55 + (50 * (myy - 1));
-                    System.out.println("se coloco manzana en: x = " + (((px - 55) / 50) + 1)  + " y = " + (((py - 55) / 50) + 1));
+                    System.out.println("se coloco manzana en: x = " + (((mx - 55) / 50) + 1)  + " y = " + (((my - 55) / 50) + 1));
                     this.comando = "manzana";
                     break;
 
                 case "ave":
                     pxx = parseInt(datos[1]);
                     pyy = parseInt(datos[2]);
+                    if ((pxx | pyy) > 10){
+                        this.imagen3 = null;
+                        graficos.clearRect(0, 0, 600, 600);
+                    }
                     this.px = 55 + (50 * (pxx - 1));
                     this.py = 55 + (50 * (pyy - 1));
                     System.out.println("se coloco ave en: x = " + (((px - 55) / 50) + 1)  + " y = " + (((py - 55) / 50) + 1));
